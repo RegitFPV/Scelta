@@ -6,7 +6,7 @@ import PhotoGrid from './components/PhotoGrid';
 import VotingChart from './components/VotingChart';
 import AdminPanel from './components/AdminPanel';
 
-// Initial dummy data
+// Initial dummy data, used only if localStorage is empty
 const initialPhotos: Photo[] = [
   { id: '1', url: 'https://picsum.photos/id/1018/800/600', title: 'Mountain Valley' },
   { id: '2', url: 'https://picsum.photos/id/1015/800/600', title: 'Winding River' },
@@ -15,10 +15,22 @@ const initialPhotos: Photo[] = [
 ];
 
 const App: React.FC = () => {
-  const [appTitle, setAppTitle] = useState('PhotoVote');
-  const [photos, setPhotos] = useState<Photo[]>(initialPhotos);
-  const [votes, setVotes] = useState<Vote[]>([]);
-  const [comments, setComments] = useState<Comment[]>([]);
+    
+  const loadFromStorage = <T,>(key: string, fallback: T): T => {
+    try {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : fallback;
+    } catch (error) {
+      console.error(`Error parsing ${key} from localStorage`, error);
+      return fallback;
+    }
+  };
+
+  const [appTitle, setAppTitle] = useState<string>(() => loadFromStorage('photo-vote-title', 'PhotoVote'));
+  const [photos, setPhotos] = useState<Photo[]>(() => loadFromStorage('photo-vote-photos', initialPhotos));
+  const [votes, setVotes] = useState<Vote[]>(() => loadFromStorage('photo-vote-votes', []));
+  const [comments, setComments] = useState<Comment[]>(() => loadFromStorage('photo-vote-comments', []));
+  
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -86,6 +98,19 @@ const App: React.FC = () => {
         setAppTitle(newTitle.trim());
     }
   };
+  
+  const handleSaveChanges = () => {
+    try {
+        localStorage.setItem('photo-vote-title', JSON.stringify(appTitle));
+        localStorage.setItem('photo-vote-photos', JSON.stringify(photos));
+        localStorage.setItem('photo-vote-votes', JSON.stringify(votes));
+        localStorage.setItem('photo-vote-comments', JSON.stringify(comments));
+        alert('Changes saved successfully!');
+    } catch (error) {
+        console.error('Failed to save changes to localStorage', error);
+        alert('Error: Could not save changes.');
+    }
+  };
 
 
   return (
@@ -109,6 +134,7 @@ const App: React.FC = () => {
                 onAddPhoto={handleAddPhoto} 
                 onDeletePhoto={handleDeletePhoto} 
                 onUpdateTitle={handleUpdateTitle}
+                onSaveChanges={handleSaveChanges}
             />
         )}
         

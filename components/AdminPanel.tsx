@@ -9,9 +9,10 @@ interface AdminPanelProps {
   onAddPhoto: (title: string, dataUrl: string) => void;
   onDeletePhoto: (photoId: string) => void;
   onUpdateTitle: (newTitle: string) => void;
+  onSaveChanges: () => void;
 }
 
-const AdminPanel: React.FC<AdminPanelProps> = ({ appTitle, photos, votes, onAddPhoto, onDeletePhoto, onUpdateTitle }) => {
+const AdminPanel: React.FC<AdminPanelProps> = ({ appTitle, photos, votes, onAddPhoto, onDeletePhoto, onUpdateTitle, onSaveChanges }) => {
   const [title, setTitle] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -60,6 +61,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ appTitle, photos, votes, onAddP
   return (
     <div className="bg-slate-800 rounded-xl shadow-lg p-4 sm:p-6 my-8">
       <h2 className="text-2xl font-bold mb-6 text-teal-300 border-b border-slate-700 pb-2">Admin Dashboard</h2>
+      
+      {/* Save Changes Button */}
+      <div className="bg-slate-900/50 p-6 rounded-lg mb-8">
+        <h3 className="text-xl font-semibold mb-2 text-sky-400">Confirm Changes</h3>
+        <p className="text-slate-400 text-sm mb-4">Click the button below to save all changes, including new photos, deletions, and title updates.</p>
+        <button 
+          onClick={onSaveChanges}
+          className="w-full sm:w-auto px-6 py-2 font-semibold text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-green-500"
+        >
+          Save All Changes
+        </button>
+      </div>
       
       {/* App Settings */}
       <div className="bg-slate-900/50 p-6 rounded-lg mb-8">
