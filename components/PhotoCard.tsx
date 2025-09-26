@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import type { Photo, Vote, Comment } from '../types';
 import { VoteIcon, CommentIcon } from './icons';
@@ -10,9 +9,10 @@ interface PhotoCardProps {
   isAdmin: boolean;
   onVote: (photoId: string, voterName: string) => boolean;
   onAddComment: (photoId: string, authorName: string, text: string) => void;
+  onPhotoClick: (photo: Photo) => void;
 }
 
-const PhotoCard: React.FC<PhotoCardProps> = ({ photo, votes, comments, isAdmin, onVote, onAddComment }) => {
+const PhotoCard: React.FC<PhotoCardProps> = ({ photo, votes, comments, isAdmin, onVote, onAddComment, onPhotoClick }) => {
   const [commentText, setCommentText] = useState('');
   const [commentAuthor, setCommentAuthor] = useState('');
   const [showComments, setShowComments] = useState(false);
@@ -47,7 +47,12 @@ const PhotoCard: React.FC<PhotoCardProps> = ({ photo, votes, comments, isAdmin, 
 
   return (
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300">
-      <img src={photo.url} alt={photo.title} className="w-full h-64 object-cover" />
+      <div 
+        className="w-full h-64 bg-black flex items-center justify-center cursor-pointer"
+        onClick={() => onPhotoClick(photo)}
+      >
+        <img src={photo.url} alt={photo.title} className="max-w-full max-h-full object-contain" />
+      </div>
       <div className="p-4">
         <h3 className="text-lg font-bold truncate text-slate-100">{photo.title}</h3>
         <div className="flex justify-between items-center mt-4">

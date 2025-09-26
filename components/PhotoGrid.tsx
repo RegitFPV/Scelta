@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Photo, Vote, Comment } from '../types';
 import PhotoCard from './PhotoCard';
@@ -10,6 +9,7 @@ interface PhotoGridProps {
   isAdmin: boolean;
   onVote: (photoId: string, voterName: string) => boolean;
   onAddComment: (photoId: string, authorName: string, text: string) => void;
+  onPhotoClick: (photo: Photo) => void;
 }
 
 const PhotoGrid: React.FC<PhotoGridProps> = (props) => {
@@ -24,6 +24,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = (props) => {
           isAdmin={props.isAdmin}
           onVote={props.onVote}
           onAddComment={props.onAddComment}
+          onPhotoClick={props.onPhotoClick}
         />
       ))}
     </div>

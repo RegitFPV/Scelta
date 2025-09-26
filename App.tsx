@@ -5,6 +5,7 @@ import LoginModal from './components/LoginModal';
 import PhotoGrid from './components/PhotoGrid';
 import VotingChart from './components/VotingChart';
 import AdminPanel from './components/AdminPanel';
+import PhotoModal from './components/PhotoModal';
 
 // Initial dummy data, used only if localStorage is empty
 const initialPhotos: Photo[] = [
@@ -34,6 +35,7 @@ const App: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
 
   const ADMIN_PASS = '0907782512';
 
@@ -116,6 +118,10 @@ const App: React.FC = () => {
         alert(errorMessage);
     }
   };
+  
+  const handlePhotoClick = (photo: Photo) => {
+    setSelectedPhoto(photo);
+  };
 
 
   return (
@@ -128,6 +134,10 @@ const App: React.FC = () => {
           onClose={() => setShowLogin(false)} 
           error={loginError}
         />
+      )}
+
+      {selectedPhoto && (
+        <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
       )}
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -152,6 +162,7 @@ const App: React.FC = () => {
           isAdmin={isAdmin}
           onVote={handleVote}
           onAddComment={handleAddComment}
+          onPhotoClick={handlePhotoClick}
         />
       </main>
 
