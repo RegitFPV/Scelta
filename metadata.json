@@ -1,0 +1,5 @@
+{
+  "name": "Photo Voting App",
+  "description": "A web application for users to upload and vote on photos. It features a public voting interface with a relative performance chart and a private admin panel for detailed analytics and content management.",
+  "requestFramePermissions": []
+}
