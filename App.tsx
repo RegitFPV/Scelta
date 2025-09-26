@@ -108,7 +108,12 @@ const App: React.FC = () => {
         alert('Changes saved successfully!');
     } catch (error) {
         console.error('Failed to save changes to localStorage', error);
-        alert('Error: Could not save changes.');
+        let errorMessage = 'Error: Could not save changes.';
+        // Check for QuotaExceededError which happens when localStorage is full
+        if (error instanceof DOMException && (error.name === 'QuotaExceededError' || error.code === 22)) {
+            errorMessage = 'Error: Could not save changes. The browser\'s local storage is full. Please try removing some photos before adding new ones.';
+        }
+        alert(errorMessage);
     }
   };
 
